@@ -406,7 +406,7 @@
             watch: {
                 selectedCountry(newCountry) {
                     // Fetch comunas when Chile is selected
-                    if (newCountry === 'CL' && Object.keys(this.chileComunas).length === 0) {
+                    if (newCountry === 'CL' && this.chileComunas && Object.keys(this.chileComunas).length === 0) {
                         this.getChileComunas();
                     }
                 }
