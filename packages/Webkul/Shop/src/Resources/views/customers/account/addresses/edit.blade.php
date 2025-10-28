@@ -292,6 +292,7 @@
                             
                             <option 
                                 v-for='(comuna, index) in chileComunas[addressData.state]'
+                                :key="index"
                                 :value="comuna.code"
                             >
                                 @{{ comuna.name }}
@@ -403,7 +404,19 @@
                 },
 
                 mounted() {
-                    this.getChileComunas();
+                    // Only fetch Chilean comunas if Chile is already selected
+                    if (this.addressData.country === 'CL') {
+                        this.getChileComunas();
+                    }
+                },
+
+                watch: {
+                    'addressData.country'(newCountry) {
+                        // Fetch comunas when Chile is selected
+                        if (newCountry === 'CL' && Object.keys(this.chileComunas).length === 0) {
+                            this.getChileComunas();
+                        }
+                    }
                 },
     
                 methods: {
