@@ -254,6 +254,49 @@
 
                     {!! view_render_event('bagisto.shop.customers.account.addresses.create_form_controls.state.after') !!}
 
+                    <!-- Chilean Comuna (only shown when Chile is selected) -->
+                    <x-shop::form.control-group v-if="country === 'CL'">
+                        <x-shop::form.control-group.label class="required">
+                            Comuna
+                        </x-shop::form.control-group.label>
+        
+                        <template v-if="haveComunas()">
+                            <x-shop::form.control-group.control
+                                type="select"
+                                id="comuna"
+                                name="comuna"
+                                rules="required"
+                                v-model="comuna"
+                                label="Comuna"
+                                placeholder="Seleccionar Comuna"
+                            >
+                                <option value="">
+                                    Seleccionar Comuna
+                                </option>
+                                
+                                <option 
+                                    v-for='(comuna, index) in chileComunas[state]'
+                                    :value="comuna.code"
+                                >
+                                    @{{ comuna.name }}
+                                </option>
+                            </x-shop::form.control-group.control>
+                        </template>
+        
+                        <template v-else>
+                            <x-shop::form.control-group.control
+                                type="text"
+                                name="comuna"
+                                :value="old('comuna')"
+                                rules="required"
+                                label="Comuna"
+                                placeholder="Comuna"
+                            />
+                        </template>
+        
+                        <x-shop::form.control-group.error control-name="comuna" />
+                    </x-shop::form.control-group>
+
                     <!-- City -->
                     <x-shop::form.control-group>
                         <x-shop::form.control-group.label class="required">
@@ -361,8 +404,16 @@
 
                         state: "{{ old('state') }}",
 
+                        comuna: "{{ old('comuna') }}",
+
                         countryStates: @json(core()->groupedStatesByCountries()),
+
+                        chileComunas: {},
                     }
+                },
+
+                mounted() {
+                    this.getChileComunas();
                 },
     
                 methods: {
@@ -373,6 +424,18 @@
                         * true if the array has a length greater than 0, and otherwise false.
                         */
                         return !!this.countryStates[this.country]?.length;
+                    },
+
+                    haveComunas() {
+                        return this.state && !!this.chileComunas[this.state]?.length;
+                    },
+
+                    getChileComunas() {
+                        this.$axios.get("{{ route('shop.api.core.chile_comunas') }}")
+                            .then(response => {
+                                this.chileComunas = response.data.data;
+                            })
+                            .catch(() => {});
                     },
                 }
             });

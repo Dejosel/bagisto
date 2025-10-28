@@ -270,6 +270,49 @@
 
                 {!! view_render_event('bagisto.shop.customers.account.addresses.edit_form_controls.state.after', ['address' => $address]) !!}
 
+                <!-- Chilean Comuna (only shown when Chile is selected) -->
+                <x-shop::form.control-group v-if="addressData.country === 'CL'">
+                    <x-shop::form.control-group.label class="required">
+                        Comuna
+                    </x-shop::form.control-group.label>
+                    
+                    <template v-if="haveComunas()">
+                        <x-shop::form.control-group.control
+                            type="select"
+                            name="comuna"
+                            id="comuna"
+                            rules="required"
+                            v-model="addressData.comuna"
+                            label="Comuna"
+                            placeholder="Seleccionar Comuna"
+                        >
+                            <option value="">
+                                Seleccionar Comuna
+                            </option>
+                            
+                            <option 
+                                v-for='(comuna, index) in chileComunas[addressData.state]'
+                                :value="comuna.code"
+                            >
+                                @{{ comuna.name }}
+                            </option>
+                        </x-shop::form.control-group.control>
+                    </template>
+
+                    <template v-else>
+                        <x-shop::form.control-group.control
+                            type="text"
+                            name="comuna"
+                            rules="required"
+                            :value="old('comuna') ?? $address->comuna"
+                            label="Comuna"
+                            placeholder="Comuna"
+                        />
+                    </template>
+
+                    <x-shop::form.control-group.error control-name="comuna" />
+                </x-shop::form.control-group>
+
                 <x-shop::form.control-group>
                     <x-shop::form.control-group.label class="required">
                         @lang('shop::app.customers.account.addresses.edit.city')
@@ -349,15 +392,35 @@
                             country: "{{ old('country') ?? $address->country }}",
 
                             state: "{{ old('state') ?? $address->state }}",
+
+                            comuna: "{{ old('comuna') ?? $address->comuna ?? '' }}",
                         },
 
                         countryStates: @json(core()->groupedStatesByCountries()),
+
+                        chileComunas: {},
                     };
+                },
+
+                mounted() {
+                    this.getChileComunas();
                 },
     
                 methods: {
                     haveStates() {
                         return !!this.countryStates[this.addressData.country]?.length;
+                    },
+
+                    haveComunas() {
+                        return this.addressData.state && !!this.chileComunas[this.addressData.state]?.length;
+                    },
+
+                    getChileComunas() {
+                        this.$axios.get("{{ route('shop.api.core.chile_comunas') }}")
+                            .then(response => {
+                                this.chileComunas = response.data.data;
+                            })
+                            .catch(() => {});
                     },
                 },
             });
