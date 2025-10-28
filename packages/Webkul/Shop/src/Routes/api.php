@@ -17,6 +17,8 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('countries', 'getCountries')->name('shop.api.core.countries');
 
         Route::get('states', 'getStates')->name('shop.api.core.states');
+
+        Route::get('chile-comunas', 'getChileComunas')->name('shop.api.core.chile_comunas');
     });
 
     Route::controller(CategoryController::class)->prefix('categories')->group(function () {

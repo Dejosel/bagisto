@@ -231,6 +231,50 @@
                 {!! view_render_event('bagisto.shop.checkout.onepage.address.form.state.after') !!}
             </div>
 
+            <!-- Chilean Comuna (only shown when Chile is selected) -->
+            <div v-if="selectedCountry === 'CL'" class="grid grid-cols-1">
+                <x-shop::form.control-group>
+                    <x-shop::form.control-group.label class="required !mt-0">
+                        Comuna
+                    </x-shop::form.control-group.label>
+
+                    <template v-if="chileComunas && haveChileComunas">
+                        <x-shop::form.control-group.control
+                            type="select"
+                            ::name="controlName + '.comuna'"
+                            ::value="address.comuna"
+                            rules="required"
+                            label="Comuna"
+                            placeholder="Seleccionar Comuna"
+                        >
+                            <option value="">
+                                Seleccionar Comuna
+                            </option>
+
+                            <option
+                                v-for='(comuna, index) in chileComunas[address.state]'
+                                :value="comuna.code"
+                            >
+                                @{{ comuna.name }}
+                            </option>
+                        </x-shop::form.control-group.control>
+                    </template>
+
+                    <template v-else>
+                        <x-shop::form.control-group.control
+                            type="text"
+                            ::name="controlName + '.comuna'"
+                            ::value="address.comuna"
+                            rules="required"
+                            label="Comuna"
+                            placeholder="Comuna"
+                        />
+                    </template>
+
+                    <x-shop::form.control-group.error ::name="controlName + '.comuna'" />
+                </x-shop::form.control-group>
+            </div>
+
             <div class="grid grid-cols-2 gap-x-5 max-md:grid-cols-1">
                 <!-- City -->
                 <x-shop::form.control-group>
@@ -320,6 +364,7 @@
                         city: '',
                         postcode: '',
                         phone: '',
+                        comuna: '',
                     }),
                 },
             },
@@ -331,6 +376,8 @@
                     countries: [],
 
                     states: null,
+
+                    chileComunas: null,
                 }
             },
 
@@ -338,12 +385,18 @@
                 haveStates() {
                     return !! this.states[this.selectedCountry]?.length;
                 },
+
+                haveChileComunas() {
+                    return this.address.state && !! this.chileComunas[this.address.state]?.length;
+                },
             },
 
             mounted() {
                 this.getCountries();
 
                 this.getStates();
+
+                this.getChileComunas();
             },
 
             methods: {
@@ -359,6 +412,14 @@
                     this.$axios.get("{{ route('shop.api.core.states') }}")
                         .then(response => {
                             this.states = response.data.data;
+                        })
+                        .catch(() => {});
+                },
+
+                getChileComunas() {
+                    this.$axios.get("{{ route('shop.api.core.chile_comunas') }}")
+                        .then(response => {
+                            this.chileComunas = response.data.data;
                         })
                         .catch(() => {});
                 },
