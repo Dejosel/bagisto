@@ -9,13 +9,12 @@ class ChileComuna extends Model implements ChileComunaContract
 {
     public $timestamps = false;
 
-    protected $table = 'chile_comunas';
+    protected $table = 'comunas';
 
     protected $fillable = [
         'region_id',
-        'region_code',
-        'code',
-        'name',
+        'nombre',
+        'codigo',
     ];
 
     /**
@@ -23,6 +22,6 @@ class ChileComuna extends Model implements ChileComunaContract
      */
     public function region()
     {
-        return $this->belongsTo(CountryStateProxy::modelClass(), 'region_id');
+        return $this->belongsTo(ChileRegionProxy::modelClass(), 'region_id');
     }
 }

@@ -3,6 +3,7 @@
 namespace Webkul\Shop\Http\Controllers\API;
 
 use Webkul\Core\Repositories\ChileComunaRepository;
+use Webkul\Core\Repositories\ChileRegionRepository;
 
 class CoreController extends APIController
 {
@@ -11,8 +12,10 @@ class CoreController extends APIController
      *
      * @return void
      */
-    public function __construct(protected ChileComunaRepository $chileComunaRepository)
-    {
+    public function __construct(
+        protected ChileComunaRepository $chileComunaRepository,
+        protected ChileRegionRepository $chileRegionRepository
+    ) {
     }
 
     /**
@@ -44,6 +47,23 @@ class CoreController extends APIController
     }
 
     /**
+     * Get Chilean regions.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getChileRegiones()
+    {
+        $regiones = $this->chileRegionRepository->all();
+
+        return response()->json([
+            'data' => $regiones->map(fn ($region) => [
+                'id'     => $region->id,
+                'nombre' => $region->nombre,
+            ]),
+        ]);
+    }
+
+    /**
      * Get Chilean comunas grouped by region.
      *
      * @return \Illuminate\Http\JsonResponse
@@ -55,12 +75,11 @@ class CoreController extends APIController
         $grouped = [];
 
         foreach ($comunas as $comuna) {
-            $grouped[$comuna->region_code][] = [
-                'id'          => $comuna->id,
-                'region_id'   => $comuna->region_id,
-                'region_code' => $comuna->region_code,
-                'code'        => $comuna->code,
-                'name'        => $comuna->name,
+            $grouped[$comuna->region_id][] = [
+                'id'        => $comuna->id,
+                'region_id' => $comuna->region_id,
+                'codigo'    => $comuna->codigo,
+                'nombre'    => $comuna->nombre,
             ];
         }
 
