@@ -307,6 +307,58 @@
                                 <x-admin::form.control-group.error control-name="state" />
                             </x-admin::form.control-group>
 
+                            <!-- Chile Region -->
+                            <x-admin::form.control-group class="w-full" v-if="address.country === 'CL'">
+                                <x-admin::form.control-group.label>
+                                    Región
+                                </x-admin::form.control-group.label>
+
+                                <x-admin::form.control-group.control
+                                    type="select"
+                                    name="region"
+                                    v-model="selectedRegion"
+                                    label="Región"
+                                    placeholder="Seleccione Región"
+                                >
+                                    <option value="">Seleccione Región</option>
+                                    <option
+                                        v-for="region in chileRegiones"
+                                        :key="region.id"
+                                        :value="region.id"
+                                    >
+                                        @{{ region.nombre }}
+                                    </option>
+                                </x-admin::form.control-group.control>
+
+                                <x-admin::form.control-group.error control-name="region" />
+                            </x-admin::form.control-group>
+
+                            <!-- Chile Comuna -->
+                            <x-admin::form.control-group class="w-full" v-if="address.country === 'CL' && selectedRegion">
+                                <x-admin::form.control-group.label>
+                                    Comuna
+                                </x-admin::form.control-group.label>
+
+                                <x-admin::form.control-group.control
+                                    type="select"
+                                    name="comuna"
+                                    ::value="address.comuna"
+                                    label="Comuna"
+                                    placeholder="Seleccione Comuna"
+                                >
+                                    <option value="">Seleccione Comuna</option>
+                                    <option
+                                        v-for="comuna in filteredComunas"
+                                        :key="comuna.id"
+                                        :value="comuna.codigo"
+                                    >
+                                        @{{ comuna.nombre }}
+                                    </option>
+                                </x-admin::form.control-group.control>
+
+                                <x-admin::form.control-group.error control-name="comuna" />
+                            </x-admin::form.control-group>
+
                             <!-- Default Address -->
                             <x-admin::form.control-group class="flex items-center gap-2.5">
                                 <x-admin::form.control-group.control
@@ -364,7 +416,50 @@
                     countryStates: @json(core()->groupedStatesByCountries()),
 
                     isLoading: false,
+
+                    chileRegiones: [],
+
+                    chileComunas: {},
+
+                    selectedRegion: null,
                 };
+            },
+
+            computed: {
+                filteredComunas() {
+                    if (!this.selectedRegion || !this.chileComunas) {
+                        return [];
+                    }
+                    return this.chileComunas[this.selectedRegion] || [];
+                }
+            },
+
+            watch: {
+                'address.country'(newCountry) {
+                    if (newCountry === 'CL') {
+                        if (this.chileRegiones.length === 0) {
+                            this.getChileRegiones();
+                        }
+                        if (this.chileComunas && Object.keys(this.chileComunas).length === 0) {
+                            this.getChileComunas();
+                        }
+                        // Set selected region from address if exists
+                        if (this.address.region) {
+                            this.selectedRegion = this.address.region;
+                        }
+                    }
+                }
+            },
+
+            mounted() {
+                // Load Chilean data if country is already Chile
+                if (this.address.country === 'CL') {
+                    this.getChileRegiones();
+                    this.getChileComunas();
+                    if (this.address.region) {
+                        this.selectedRegion = this.address.region;
+                    }
+                }
             },
 
             methods: {
@@ -398,7 +493,27 @@
 
                 haveStates() {
                     return !!this.countryStates[this.address.country]?.length;
-                }
+                },
+
+                getChileRegiones() {
+                    this.$axios.get('{{ route('shop.api.core.chile_regiones') }}')
+                        .then(response => {
+                            this.chileRegiones = response.data.data;
+                        })
+                        .catch(error => {
+                            console.error('Error loading Chilean regions:', error);
+                        });
+                },
+
+                getChileComunas() {
+                    this.$axios.get('{{ route('shop.api.core.chile_comunas') }}')
+                        .then(response => {
+                            this.chileComunas = response.data.data;
+                        })
+                        .catch(error => {
+                            console.error('Error loading Chilean comunas:', error);
+                        });
+                },
             }
         });
     </script>
