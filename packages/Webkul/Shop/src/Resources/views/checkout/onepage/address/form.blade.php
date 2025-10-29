@@ -243,8 +243,7 @@
                         <x-shop::form.control-group.control
                             type="select"
                             ::name="controlName + '.region'"
-                            v-model="address.region"
-                            @change="selectedRegion = address.region"
+                            ::value="address.region"
                             rules="required"
                             label="Región"
                             placeholder="Seleccionar Región"
@@ -275,7 +274,7 @@
                             <x-shop::form.control-group.control
                                 type="select"
                                 ::name="controlName + '.comuna'"
-                                v-model="address.comuna"
+                                ::value="address.comuna"
                                 rules="required"
                                 label="Comuna"
                                 placeholder="Seleccionar Comuna"
@@ -457,7 +456,7 @@
                 },
 
                 'address.region'(newRegion) {
-                    // Sync address.region to selectedRegion for reactive comuna dropdown
+                    // Keep selectedRegion in sync when address.region changes
                     this.selectedRegion = newRegion;
                 }
             },
