@@ -60,6 +60,8 @@ class AddressController extends Controller
             'phone',
             'email',
             'default_address',
+            'region',
+            'comuna',
         ]), [
             'customer_id' => $customer->id,
             'address'     => implode(PHP_EOL, array_filter($request->input('address'))),
@@ -128,6 +130,8 @@ class AddressController extends Controller
             'postcode',
             'phone',
             'email',
+            'region',
+            'comuna',
         ]), [
             'customer_id' => $customer->id,
             'address'     => implode(PHP_EOL, array_filter($request->input('address'))),

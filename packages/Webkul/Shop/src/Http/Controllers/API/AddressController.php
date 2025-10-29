@@ -49,6 +49,8 @@ class AddressController extends APIController
             'phone',
             'default_address',
             'email',
+            'region',
+            'comuna',
         ]), [
             'customer_id' => $customer->id,
             'address'     => implode(PHP_EOL, array_filter($request->input('address'))),
@@ -92,6 +94,8 @@ class AddressController extends APIController
             'phone',
             'default_address',
             'email',
+            'region',
+            'comuna',
         ]), [
             'customer_id' => $customer->id,
             'address'     => implode(PHP_EOL, array_filter(request()->input('address'))),
