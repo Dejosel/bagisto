@@ -243,8 +243,8 @@
                         <x-shop::form.control-group.control
                             type="select"
                             ::name="controlName + '.region'"
-                            ::value="address.region"
-                            v-model="selectedRegion"
+                            v-model="address.region"
+                            @change="selectedRegion = address.region"
                             rules="required"
                             label="Región"
                             placeholder="Seleccionar Región"
@@ -275,7 +275,7 @@
                             <x-shop::form.control-group.control
                                 type="select"
                                 ::name="controlName + '.comuna'"
-                                ::value="address.comuna"
+                                v-model="address.comuna"
                                 rules="required"
                                 label="Comuna"
                                 placeholder="Seleccionar Comuna"
@@ -454,6 +454,11 @@
                             this.getChileComunas();
                         }
                     }
+                },
+
+                'address.region'(newRegion) {
+                    // Sync address.region to selectedRegion for reactive comuna dropdown
+                    this.selectedRegion = newRegion;
                 }
             },
 
