@@ -431,9 +431,9 @@
 
                     let formData = new FormData(this.$refs.createForm);
                     
-                    formData.append('default_address', formData.get('default_address') ? 1 : 0);
+                    formData.set('default_address', formData.get('default_address') ? 1 : 0);
                     
-                    // Ensure Chilean region and comuna are included
+                    // For Chilean addresses, explicitly set region and comuna values
                     if (this.country === 'CL') {
                         if (this.selectedRegion) {
                             formData.set('region', this.selectedRegion);
