@@ -474,7 +474,7 @@
                     formData.append('default_address', formData.get('default_address') ? 1 : 0);
                     
                     // Ensure Chilean region and comuna are included
-                    if (this.country === 'CL') {
+                    if (this.address.country === 'CL') {
                         if (this.selectedRegion) {
                             formData.set('region', this.selectedRegion);
                         }
