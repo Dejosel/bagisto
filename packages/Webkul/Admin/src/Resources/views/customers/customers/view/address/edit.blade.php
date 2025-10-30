@@ -313,12 +313,10 @@
                                     Región
                                 </x-admin::form.control-group.label>
 
-                                <x-admin::form.control-group.control
-                                    type="select"
+                                <select
                                     name="region"
                                     v-model="selectedRegion"
-                                    label="Región"
-                                    placeholder="Seleccione Región"
+                                    class="custom-select block w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm font-normal text-gray-600 transition-all hover:border-gray-400 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-gray-400"
                                 >
                                     <option value="">Seleccione Región</option>
                                     <option
@@ -328,7 +326,7 @@
                                     >
                                         @{{ region.nombre }}
                                     </option>
-                                </x-admin::form.control-group.control>
+                                </select>
 
                                 <x-admin::form.control-group.error control-name="region" />
                             </x-admin::form.control-group>
@@ -339,12 +337,10 @@
                                     Comuna
                                 </x-admin::form.control-group.label>
 
-                                <x-admin::form.control-group.control
-                                    type="select"
+                                <select
                                     name="comuna"
                                     v-model="selectedComuna"
-                                    label="Comuna"
-                                    placeholder="Seleccione Comuna"
+                                    class="custom-select block w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm font-normal text-gray-600 transition-all hover:border-gray-400 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-gray-400"
                                 >
                                     <option value="">Seleccione Comuna</option>
                                     <option
@@ -354,7 +350,7 @@
                                     >
                                         @{{ comuna.nombre }}
                                     </option>
-                                </x-admin::form.control-group.control>
+                                </select>
 
                                 <x-admin::form.control-group.error control-name="comuna" />
                             </x-admin::form.control-group>
