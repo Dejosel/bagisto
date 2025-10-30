@@ -342,7 +342,7 @@
                                 <x-admin::form.control-group.control
                                     type="select"
                                     name="comuna"
-                                    ::value="address.comuna"
+                                    v-model="selectedComuna"
                                     label="Comuna"
                                     placeholder="Seleccione Comuna"
                                 >
@@ -422,6 +422,8 @@
                     chileComunas: {},
 
                     selectedRegion: null,
+
+                    selectedComuna: null,
                 };
             },
 
@@ -458,6 +460,9 @@
                     this.getChileComunas();
                     if (this.address.region) {
                         this.selectedRegion = this.address.region;
+                    }
+                    if (this.address.comuna) {
+                        this.selectedComuna = this.address.comuna;
                     }
                 }
             },

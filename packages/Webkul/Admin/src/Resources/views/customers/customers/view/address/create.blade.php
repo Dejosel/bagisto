@@ -320,6 +320,7 @@
                             <x-admin::form.control-group.control
                                 type="select"
                                 name="comuna"
+                                v-model="selectedComuna"
                                 label="Comuna"
                                 placeholder="Seleccione Comuna"
                             >
@@ -401,6 +402,8 @@
                     chileComunas: {},
 
                     selectedRegion: null,
+
+                    selectedComuna: null,
                 };
             },
 
