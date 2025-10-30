@@ -452,14 +452,7 @@
             mounted() {
                 // Load Chilean data if country is already Chile
                 if (this.address.country === 'CL') {
-                    this.getChileRegiones();
-                    this.getChileComunas();
-                    if (this.address.region) {
-                        this.selectedRegion = this.address.region;
-                    }
-                    if (this.address.comuna) {
-                        this.selectedComuna = this.address.comuna;
-                    }
+                    this.loadChileanData();
                 }
             },
 
@@ -504,6 +497,29 @@
 
                 haveStates() {
                     return !!this.countryStates[this.address.country]?.length;
+                },
+
+                loadChileanData() {
+                    // Load regions and comunas, then set selected values
+                    Promise.all([
+                        this.$axios.get('{{ route('shop.api.core.chile_regiones') }}'),
+                        this.$axios.get('{{ route('shop.api.core.chile_comunas') }}')
+                    ])
+                    .then(([regionesResponse, comunasResponse]) => {
+                        this.chileRegiones = regionesResponse.data.data;
+                        this.chileComunas = comunasResponse.data.data;
+                        
+                        // Now set the selected values after data is loaded
+                        if (this.address.region) {
+                            this.selectedRegion = this.address.region;
+                        }
+                        if (this.address.comuna) {
+                            this.selectedComuna = this.address.comuna;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading Chilean data:', error);
+                    });
                 },
 
                 getChileRegiones() {
