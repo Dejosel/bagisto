@@ -430,6 +430,12 @@
                     this.isLoading = true;
 
                     params.default_address = params.default_address ?? 0;
+                    
+                    // Add Chilean region and comuna to params
+                    if (this.country === 'CL') {
+                        params.region = this.selectedRegion;
+                        params.comuna = this.selectedComuna;
+                    }
 
                     this.$axios.post('{{ route('admin.customers.customers.addresses.store', $customer->id) }}', params)
                         .then((response) => {
