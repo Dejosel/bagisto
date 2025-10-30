@@ -29,7 +29,7 @@
             v-slot="{ meta, errors, handleSubmit }"
             as="div"
         >
-            <form @submit="handleSubmit($event, create)">
+            <form ref="createForm" @submit="handleSubmit($event, create)">
                 {!! view_render_event('bagisto.admin.customers.addresses.create.create_form_controls.before') !!}
 
                 <!-- Address Create Drawer -->
@@ -429,15 +429,21 @@
                 create(params, { resetForm, setErrors }) {
                     this.isLoading = true;
 
-                    params.default_address = params.default_address ?? 0;
+                    let formData = new FormData(this.$refs.createForm);
                     
-                    // Add Chilean region and comuna to params
+                    formData.append('default_address', formData.get('default_address') ? 1 : 0);
+                    
+                    // Ensure Chilean region and comuna are included
                     if (this.country === 'CL') {
-                        params.region = this.selectedRegion;
-                        params.comuna = this.selectedComuna;
+                        if (this.selectedRegion) {
+                            formData.set('region', this.selectedRegion);
+                        }
+                        if (this.selectedComuna) {
+                            formData.set('comuna', this.selectedComuna);
+                        }
                     }
 
-                    this.$axios.post('{{ route('admin.customers.customers.addresses.store', $customer->id) }}', params)
+                    this.$axios.post('{{ route('admin.customers.customers.addresses.store', $customer->id) }}', formData)
                         .then((response) => {
                             this.$emitter.emit('add-flash', { type: 'success', message: response.data.message });
 
