@@ -244,6 +244,7 @@
                             type="select"
                             ::name="controlName + '.region'"
                             ::value="address.region"
+                            v-model="selectedRegion"
                             rules="required"
                             label="Región"
                             placeholder="Seleccionar Región"
