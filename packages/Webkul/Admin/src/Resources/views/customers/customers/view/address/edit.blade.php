@@ -446,6 +446,17 @@
                             this.selectedRegion = this.address.region;
                         }
                     }
+                },
+
+                // Watch for address changes (e.g., when creating then immediately editing)
+                'address': {
+                    handler(newAddress) {
+                        if (newAddress && newAddress.country === 'CL') {
+                            // Reload Chilean data and set values
+                            this.loadChileanData();
+                        }
+                    },
+                    deep: true
                 }
             },
 
