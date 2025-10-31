@@ -35,9 +35,16 @@
 
                     {{ $refund->order->shipping_address->address }}<br/>
 
-                    {{ $refund->order->shipping_address->postcode . " " . $refund->order->shipping_address->city }}<br/>
+                    {{ $refund->order->shipping_address->postcode }}<br/>
 
-                    {{ $refund->order->shipping_address->state }}<br/>
+                    @if($refund->order->shipping_address->region)
+                        Región: {{ $refund->order->shipping_address->region }}<br/>
+                    @endif
+
+                    @if($refund->order->shipping_address->comuna)
+                        Comuna: {{ $refund->order->shipping_address->comuna }}<br/>
+                    @endif
+
 
                     ---<br/>
 
@@ -67,9 +74,16 @@
 
                     {{ $refund->order->billing_address->address }}<br/>
 
-                    {{ $refund->order->billing_address->postcode . " " . $refund->order->billing_address->city }}<br/>
+                    {{ $refund->order->billing_address->postcode }}<br/>
 
-                    {{ $refund->order->billing_address->state }}<br/>
+                    @if($refund->order->billing_address->region)
+                        Región: {{ $refund->order->billing_address->region }}<br/>
+                    @endif
+
+                    @if($refund->order->billing_address->comuna)
+                        Comuna: {{ $refund->order->billing_address->comuna }}<br/>
+                    @endif
+
 
                     ---<br/>
 

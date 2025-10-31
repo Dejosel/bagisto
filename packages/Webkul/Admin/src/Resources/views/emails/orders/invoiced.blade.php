@@ -35,9 +35,16 @@
 
                     {{ $invoice->order->shipping_address->address }}<br/>
 
-                    {{ $invoice->order->shipping_address->postcode . " " . $invoice->order->shipping_address->city }}<br/>
+                    {{ $invoice->order->shipping_address->postcode }}<br/>
 
-                    {{ $invoice->order->shipping_address->state }}<br/>
+                    @if($invoice->order->shipping_address->region)
+                        Región: {{ $invoice->order->shipping_address->region }}<br/>
+                    @endif
+
+                    @if($invoice->order->shipping_address->comuna)
+                        Comuna: {{ $invoice->order->shipping_address->comuna }}<br/>
+                    @endif
+
 
                     ---<br/>
 
@@ -67,9 +74,16 @@
 
                     {{ $invoice->order->billing_address->address }}<br/>
 
-                    {{ $invoice->order->billing_address->postcode . " " . $invoice->order->billing_address->city }}<br/>
+                    {{ $invoice->order->billing_address->postcode }}<br/>
 
-                    {{ $invoice->order->billing_address->state }}<br/>
+                    @if($invoice->order->billing_address->region)
+                        Región: {{ $invoice->order->billing_address->region }}<br/>
+                    @endif
+
+                    @if($invoice->order->billing_address->comuna)
+                        Comuna: {{ $invoice->order->billing_address->comuna }}<br/>
+                    @endif
+
 
                     ---<br/>
 
