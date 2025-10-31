@@ -36,6 +36,7 @@
                     <x-admin::drawer
                         width="350px"
                         ref="customerAddressModal"
+                        @opened="onModalOpened"
                     >
                         <!-- Modal Header -->
                         <x-slot:header class="py-5">
@@ -435,28 +436,8 @@
             watch: {
                 'address.country'(newCountry) {
                     if (newCountry === 'CL') {
-                        if (this.chileRegiones.length === 0) {
-                            this.getChileRegiones();
-                        }
-                        if (this.chileComunas && Object.keys(this.chileComunas).length === 0) {
-                            this.getChileComunas();
-                        }
-                        // Set selected region from address if exists
-                        if (this.address.region) {
-                            this.selectedRegion = this.address.region;
-                        }
+                        this.loadChileanDataIfNeeded();
                     }
-                },
-
-                // Watch for address changes (e.g., when creating then immediately editing)
-                'address': {
-                    handler(newAddress) {
-                        if (newAddress && newAddress.country === 'CL') {
-                            // Reload Chilean data and set values
-                            this.loadChileanData();
-                        }
-                    },
-                    deep: true
                 }
             },
 
@@ -468,6 +449,17 @@
             },
 
             methods: {
+                onModalOpened() {
+                    // This is called every time the modal opens
+                    // Reset and reload Chilean data if country is Chile
+                    if (this.address.country === 'CL') {
+                        // Force reload of data and re-set selected values
+                        this.selectedRegion = null;
+                        this.selectedComuna = null;
+                        this.loadChileanData();
+                    }
+                },
+
                 update(params, { resetForm, setErrors }) {
                     this.isLoading = true;
 
@@ -508,6 +500,21 @@
 
                 haveStates() {
                     return !!this.countryStates[this.address.country]?.length;
+                },
+
+                loadChileanDataIfNeeded() {
+                    // Only load if data not already loaded
+                    if (this.chileRegiones.length === 0 || Object.keys(this.chileComunas).length === 0) {
+                        this.loadChileanData();
+                    } else {
+                        // Data already loaded, just set the values
+                        if (this.address.region) {
+                            this.selectedRegion = this.address.region;
+                        }
+                        if (this.address.comuna) {
+                            this.selectedComuna = this.address.comuna;
+                        }
+                    }
                 },
 
                 loadChileanData() {
