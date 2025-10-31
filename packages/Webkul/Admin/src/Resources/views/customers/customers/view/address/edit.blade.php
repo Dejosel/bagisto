@@ -208,7 +208,7 @@
                             </x-admin::form.control-group>
 
                             <!-- City -->
-                            <x-admin::form.control-group class="w-full">
+                            <x-admin::form.control-group class="w-full" v-if="address.country !== 'CL'">
                                 <x-admin::form.control-group.label class="required">
                                     @lang('admin::app.customers.customers.view.address.edit.city')
                                 </x-admin::form.control-group.label>
@@ -270,7 +270,7 @@
                             </x-admin::form.control-group>
 
                             <!-- State Name -->
-                            <x-admin::form.control-group class="w-full">
+                            <x-admin::form.control-group class="w-full" v-if="address.country !== 'CL'">
                                 <x-admin::form.control-group.label class="required">
                                     @lang('admin::app.customers.customers.view.address.edit.state')
                                 </x-admin::form.control-group.label>

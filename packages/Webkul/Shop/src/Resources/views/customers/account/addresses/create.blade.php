@@ -206,7 +206,12 @@
                             </option>
             
                             @foreach (core()->countries() as $country)
-                                <option value="{{ $country->code }}">{{ $country->name }}</option>
+                                <option 
+                                    value="{{ $country->code }}"
+                                    {{ $country->code === config('app.default_country') ? 'selected' : '' }}
+                                >
+                                    {{ $country->name }}
+                                </option>
                             @endforeach
                         </x-shop::form.control-group.control>
             
@@ -214,7 +219,7 @@
                     </x-shop::form.control-group>
         
                     <!-- State Name -->
-                    <x-shop::form.control-group>
+                    <x-shop::form.control-group v-if="country !== 'CL'">
                         <x-shop::form.control-group.label class="{{ core()->isStateRequired() ? 'required' : '' }}">
                             @lang('shop::app.customers.account.addresses.create.state')
                         </x-shop::form.control-group.label>
@@ -333,7 +338,7 @@
                     </template>
 
                     <!-- City -->
-                    <x-shop::form.control-group>
+                    <x-shop::form.control-group v-if="country !== 'CL'">
                         <x-shop::form.control-group.label class="required">
                             @lang('shop::app.customers.account.addresses.create.city')
                         </x-shop::form.control-group.label>
@@ -435,7 +440,7 @@
     
                 data() {
                     return {
-                        country: "{{ old('country') }}",
+                        country: "{{ old('country') ?? config('app.default_country') }}",
 
                         state: "{{ old('state') }}",
 

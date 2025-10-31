@@ -231,7 +231,7 @@
                 {!! view_render_event('bagisto.shop.customers.account.addresses.edit_form_controls.country.after', ['address' => $address]) !!}
 
                 <!-- State Name -->
-                <x-shop::form.control-group>
+                <x-shop::form.control-group v-if="addressData.country !== 'CL'">
                     <x-shop::form.control-group.label class="{{ core()->isStateRequired() ? 'required' : '' }}">
                         @lang('shop::app.customers.account.addresses.edit.state')
                     </x-shop::form.control-group.label>
@@ -348,7 +348,7 @@
                     </x-shop::form.control-group>
                 </template>
 
-                <x-shop::form.control-group>
+                <x-shop::form.control-group v-if="addressData.country !== 'CL'">
                     <x-shop::form.control-group.label class="required">
                         @lang('shop::app.customers.account.addresses.edit.city')
                     </x-shop::form.control-group.label>
