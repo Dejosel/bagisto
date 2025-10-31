@@ -36,6 +36,8 @@ class AddressResource extends JsonResource
             'default_address'   => $this->default_address,
             'use_for_shipping'  => $this->use_for_shipping,
             'additional'        => $this->additional,
+            'region'            => $this->region,
+            'comuna'            => $this->comuna,
         ];
     }
 }
