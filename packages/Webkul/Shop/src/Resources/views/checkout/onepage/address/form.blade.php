@@ -183,151 +183,90 @@
                 </x-shop::form.control-group>
 
                 {!! view_render_event('bagisto.shop.checkout.onepage.address.form.country.after') !!}
-
-                <!-- State -->
-                <x-shop::form.control-group>
-                    <x-shop::form.control-group.label class="{{ core()->isStateRequired() ? 'required' : '' }} !mt-0">
-                        @lang('shop::app.checkout.onepage.address.state')
-                    </x-shop::form.control-group.label>
-
-                    <template v-if="states">
-                        <template v-if="haveStates">
-                            <x-shop::form.control-group.control
-                                type="select"
-                                ::name="controlName + '.state'"
-                                rules="{{ core()->isStateRequired() ? 'required' : '' }}"
-                                ::value="address.state"
-                                :label="trans('shop::app.checkout.onepage.address.state')"
-                                :placeholder="trans('shop::app.checkout.onepage.address.state')"
-                            >
-                                <option value="">
-                                    @lang('shop::app.checkout.onepage.address.select-state')
-                                </option>
-
-                                <option
-                                    v-for='(state, index) in states[selectedCountry]'
-                                    :value="state.code"
-                                >
-                                    @{{ state.default_name }}
-                                </option>
-                            </x-shop::form.control-group.control>
-                        </template>
-
-                        <template v-else>
-                            <x-shop::form.control-group.control
-                                type="text"
-                                ::name="controlName + '.state'"
-                                ::value="address.state"
-                                rules="{{ core()->isStateRequired() ? 'required' : '' }}"
-                                :label="trans('shop::app.checkout.onepage.address.state')"
-                                :placeholder="trans('shop::app.checkout.onepage.address.state')"
-                            />
-                        </template>
-                    </template>
-
-                    <x-shop::form.control-group.error ::name="controlName + '.state'" />
-                </x-shop::form.control-group>
-
-                {!! view_render_event('bagisto.shop.checkout.onepage.address.form.state.after') !!}
             </div>
 
-            <!-- Chilean Region and Comuna (only shown when Chile is selected) -->
-            <template v-if="selectedCountry === 'CL'">
-                <div class="grid grid-cols-1">
-                    <!-- Chilean Region -->
-                    <x-shop::form.control-group>
-                        <x-shop::form.control-group.label class="required !mt-0">
-                            Región
-                        </x-shop::form.control-group.label>
-
-                        <x-shop::form.control-group.control
-                            type="select"
-                            ::name="controlName + '.region'"
-                            ::value="address.region"
-                            v-model="selectedRegion"
-                            rules="required"
-                            label="Región"
-                            placeholder="Seleccionar Región"
-                        >
-                            <option value="">
-                                Seleccionar Región
-                            </option>
-
-                            <option
-                                v-for='region in chileRegiones'
-                                :key="region.id"
-                                :value="region.id"
-                            >
-                                @{{ region.nombre }}
-                            </option>
-                        </x-shop::form.control-group.control>
-
-                        <x-shop::form.control-group.error ::name="controlName + '.region'" />
-                    </x-shop::form.control-group>
-
-                    <!-- Chilean Comuna -->
-                    <x-shop::form.control-group v-if="selectedRegion">
-                        <x-shop::form.control-group.label class="required !mt-0">
-                            Comuna
-                        </x-shop::form.control-group.label>
-
-                        <template v-if="chileComunas && haveChileComunas">
-                            <x-shop::form.control-group.control
-                                type="select"
-                                ::name="controlName + '.comuna'"
-                                ::value="address.comuna"
-                                rules="required"
-                                label="Comuna"
-                                placeholder="Seleccionar Comuna"
-                            >
-                                <option value="">
-                                    Seleccionar Comuna
-                                </option>
-
-                                <option
-                                    v-for='(comuna, index) in chileComunas[selectedRegion]'
-                                    :key="index"
-                                    :value="comuna.codigo"
-                                >
-                                    @{{ comuna.nombre }}
-                                </option>
-                            </x-shop::form.control-group.control>
-                        </template>
-
-                        <template v-else>
-                            <x-shop::form.control-group.control
-                                type="text"
-                                ::name="controlName + '.comuna'"
-                                ::value="address.comuna"
-                                rules="required"
-                                label="Comuna"
-                                placeholder="Comuna"
-                            />
-                        </template>
-
-                        <x-shop::form.control-group.error ::name="controlName + '.comuna'" />
-                    </x-shop::form.control-group>
-                </div>
-            </template>
-
             <div class="grid grid-cols-2 gap-x-5 max-md:grid-cols-1">
-                <!-- City -->
+                <!-- Región -->
                 <x-shop::form.control-group>
                     <x-shop::form.control-group.label class="required !mt-0">
-                        @lang('shop::app.checkout.onepage.address.city')
+                        Región
                     </x-shop::form.control-group.label>
 
                     <x-shop::form.control-group.control
-                        type="text"
-                        ::name="controlName + '.city'"
-                        ::value="address.city"
+                        type="select"
+                        ::name="controlName + '.region'"
+                        ::value="address.region"
+                        v-model="selectedRegion"
                         rules="required"
-                        :label="trans('shop::app.checkout.onepage.address.city')"
-                        :placeholder="trans('shop::app.checkout.onepage.address.city')"
-                    />
+                        label="Región"
+                        placeholder="Seleccionar Región"
+                    >
+                        <option value="">
+                            Seleccionar Región
+                        </option>
 
-                    <x-shop::form.control-group.error ::name="controlName + '.city'" />
+                        <option
+                            v-for='region in chileRegiones'
+                            :key="region.id"
+                            :value="region.id"
+                        >
+                            @{{ region.nombre }}
+                        </option>
+                    </x-shop::form.control-group.control>
+
+                    <x-shop::form.control-group.error ::name="controlName + '.region'" />
                 </x-shop::form.control-group>
+
+                {!! view_render_event('bagisto.shop.checkout.onepage.address.form.region.after') !!}
+
+                <!-- Comuna -->
+                <x-shop::form.control-group>
+                    <x-shop::form.control-group.label class="required !mt-0">
+                        Comuna
+                    </x-shop::form.control-group.label>
+
+                    <template v-if="chileComunas && haveChileComunas">
+                        <x-shop::form.control-group.control
+                            type="select"
+                            ::name="controlName + '.comuna'"
+                            ::value="address.comuna"
+                            rules="required"
+                            label="Comuna"
+                            placeholder="Seleccionar Comuna"
+                        >
+                            <option value="">
+                                Seleccionar Comuna
+                            </option>
+
+                            <option
+                                v-for='(comuna, index) in chileComunas[selectedRegion]'
+                                :key="index"
+                                :value="comuna.codigo"
+                            >
+                                @{{ comuna.nombre }}
+                            </option>
+                        </x-shop::form.control-group.control>
+                    </template>
+
+                    <template v-else>
+                        <x-shop::form.control-group.control
+                            type="text"
+                            ::name="controlName + '.comuna'"
+                            ::value="address.comuna"
+                            rules="required"
+                            label="Comuna"
+                            placeholder="Comuna"
+                            :disabled="!selectedRegion"
+                        />
+                    </template>
+
+                    <x-shop::form.control-group.error ::name="controlName + '.comuna'" />
+                </x-shop::form.control-group>
+
+                {!! view_render_event('bagisto.shop.checkout.onepage.address.form.comuna.after') !!}
+            </div>
+
+            <div class="grid grid-cols-2 gap-x-5 max-md:grid-cols-1">
 
                 {!! view_render_event('bagisto.shop.checkout.onepage.address.form.city.after') !!}
 
@@ -413,8 +352,6 @@
 
                     countries: [],
 
-                    states: null,
-
                     chileRegiones: [],
 
                     chileComunas: {},
@@ -422,10 +359,6 @@
             },
 
             computed: {
-                haveStates() {
-                    return !! this.states[this.selectedCountry]?.length;
-                },
-
                 haveChileComunas() {
                     return this.selectedRegion && !! this.chileComunas[this.selectedRegion]?.length;
                 },
@@ -434,28 +367,12 @@
             mounted() {
                 this.getCountries();
 
-                this.getStates();
-
-                // Only fetch Chilean data if Chile is already selected
-                if (this.selectedCountry === 'CL') {
-                    this.getChileRegiones();
-                    this.getChileComunas();
-                }
+                // Always load Chilean data on mount
+                this.getChileRegiones();
+                this.getChileComunas();
             },
 
             watch: {
-                selectedCountry(newCountry) {
-                    // Fetch Chilean data when Chile is selected
-                    if (newCountry === 'CL') {
-                        if (this.chileRegiones.length === 0) {
-                            this.getChileRegiones();
-                        }
-                        if (this.chileComunas && Object.keys(this.chileComunas).length === 0) {
-                            this.getChileComunas();
-                        }
-                    }
-                },
-
                 'address.region'(newRegion) {
                     // Keep selectedRegion in sync when address.region changes
                     this.selectedRegion = newRegion;
@@ -467,14 +384,6 @@
                     this.$axios.get("{{ route('shop.api.core.countries') }}")
                         .then(response => {
                             this.countries = response.data.data;
-                        })
-                        .catch(() => {});
-                },
-
-                getStates() {
-                    this.$axios.get("{{ route('shop.api.core.states') }}")
-                        .then(response => {
-                            this.states = response.data.data;
                         })
                         .catch(() => {});
                 },
