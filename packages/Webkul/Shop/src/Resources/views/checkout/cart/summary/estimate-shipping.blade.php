@@ -63,7 +63,7 @@
                 {!! view_render_event('bagisto.shop.checkout.onepage.address.form.country.after') !!}
 
                 <!-- State -->
-                <x-shop::form.control-group>
+                <x-shop::form.control-group v-if="selectedCountry !== 'CL'">
                     <x-shop::form.control-group.label class="{{ core()->isStateRequired() ? 'required' : '' }}">
                         @lang('shop::app.checkout.cart.summary.estimate-shipping.state')
                     </x-shop::form.control-group.label>
@@ -173,7 +173,7 @@
 
             data() {
                 return {
-                    selectedCountry: '',
+                    selectedCountry: "{{ config('app.default_country') }}",
 
                     countries: [],
 
