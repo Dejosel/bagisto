@@ -270,6 +270,84 @@
 
                 {!! view_render_event('bagisto.shop.customers.account.addresses.edit_form_controls.state.after', ['address' => $address]) !!}
 
+                <!-- Chilean Region and Comuna (only shown when Chile is selected) -->
+                <template v-if="addressData.country === 'CL'">
+                    <!-- Chilean Region -->
+                    <x-shop::form.control-group>
+                        <x-shop::form.control-group.label class="required">
+                            Región
+                        </x-shop::form.control-group.label>
+
+                        <x-shop::form.control-group.control
+                            type="select"
+                            name="region"
+                            id="region"
+                            rules="required"
+                            v-model="addressData.region"
+                            label="Región"
+                            placeholder="Seleccionar Región"
+                        >
+                            <option value="">
+                                Seleccionar Región
+                            </option>
+                            
+                            <option 
+                                v-for='regionItem in chileRegiones'
+                                :key="regionItem.id"
+                                :value="regionItem.id"
+                            >
+                                @{{ regionItem.nombre }}
+                            </option>
+                        </x-shop::form.control-group.control>
+
+                        <x-shop::form.control-group.error control-name="region" />
+                    </x-shop::form.control-group>
+
+                    <!-- Chilean Comuna -->
+                    <x-shop::form.control-group v-if="addressData.region">
+                        <x-shop::form.control-group.label class="required">
+                            Comuna
+                        </x-shop::form.control-group.label>
+                        
+                        <template v-if="haveComunas()">
+                            <x-shop::form.control-group.control
+                                type="select"
+                                name="comuna"
+                                id="comuna"
+                                rules="required"
+                                v-model="addressData.comuna"
+                                label="Comuna"
+                                placeholder="Seleccionar Comuna"
+                            >
+                                <option value="">
+                                    Seleccionar Comuna
+                                </option>
+                                
+                                <option 
+                                    v-for='(comuna, index) in chileComunas[addressData.region]'
+                                    :key="index"
+                                    :value="comuna.codigo"
+                                >
+                                    @{{ comuna.nombre }}
+                                </option>
+                            </x-shop::form.control-group.control>
+                        </template>
+
+                        <template v-else>
+                            <x-shop::form.control-group.control
+                                type="text"
+                                name="comuna"
+                                rules="required"
+                                :value="old('comuna') ?? $address->comuna"
+                                label="Comuna"
+                                placeholder="Comuna"
+                            />
+                        </template>
+
+                        <x-shop::form.control-group.error control-name="comuna" />
+                    </x-shop::form.control-group>
+                </template>
+
                 <x-shop::form.control-group>
                     <x-shop::form.control-group.label class="required">
                         @lang('shop::app.customers.account.addresses.edit.city')
@@ -349,15 +427,65 @@
                             country: "{{ old('country') ?? $address->country }}",
 
                             state: "{{ old('state') ?? $address->state }}",
+
+                            region: "{{ old('region') ?? $address->region ?? '' }}",
+
+                            comuna: "{{ old('comuna') ?? $address->comuna ?? '' }}",
                         },
 
                         countryStates: @json(core()->groupedStatesByCountries()),
+
+                        chileRegiones: [],
+
+                        chileComunas: {},
                     };
+                },
+
+                mounted() {
+                    // Only fetch Chilean data if Chile is already selected
+                    if (this.addressData.country === 'CL') {
+                        this.getChileRegiones();
+                        this.getChileComunas();
+                    }
+                },
+
+                watch: {
+                    'addressData.country'(newCountry) {
+                        // Fetch Chilean data when Chile is selected
+                        if (newCountry === 'CL') {
+                            if (this.chileRegiones.length === 0) {
+                                this.getChileRegiones();
+                            }
+                            if (this.chileComunas && Object.keys(this.chileComunas).length === 0) {
+                                this.getChileComunas();
+                            }
+                        }
+                    }
                 },
     
                 methods: {
                     haveStates() {
                         return !!this.countryStates[this.addressData.country]?.length;
+                    },
+
+                    haveComunas() {
+                        return this.addressData.region && !!this.chileComunas[this.addressData.region]?.length;
+                    },
+
+                    getChileRegiones() {
+                        this.$axios.get("{{ route('shop.api.core.chile_regiones') }}")
+                            .then(response => {
+                                this.chileRegiones = response.data.data;
+                            })
+                            .catch(() => {});
+                    },
+
+                    getChileComunas() {
+                        this.$axios.get("{{ route('shop.api.core.chile_comunas') }}")
+                            .then(response => {
+                                this.chileComunas = response.data.data;
+                            })
+                            .catch(() => {});
                     },
                 },
             });
