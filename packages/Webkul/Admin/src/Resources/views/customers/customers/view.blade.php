@@ -270,8 +270,14 @@
                                                 @{{ address.address.split('\n').join(', ') }},
                                             </template>
 
-                                            @{{ address.city }},
-                                            @{{ address.state }},
+                                            <template v-if="address.region">
+                                                Región: @{{ address.region }},
+                                            </template>
+
+                                            <template v-if="address.comuna">
+                                                Comuna: @{{ address.comuna }},
+                                            </template>
+
                                             @{{ address.country }},
                                             @{{ address.postcode }}
                                         </p>
