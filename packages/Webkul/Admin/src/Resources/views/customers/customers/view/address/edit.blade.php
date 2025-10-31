@@ -217,7 +217,7 @@
                                     type="text"
                                     name="city"
                                     ::value="address.city"
-                                    rules="required"
+                                    ::rules="address.country !== 'CL' ? 'required' : ''"
                                     :label="trans('admin::app.customers.customers.view.address.edit.city')"
                                     :placeholder="trans('admin::app.customers.customers.view.address.edit.city')"
                                 />
@@ -280,7 +280,7 @@
                                         type="select"
                                         id="state"
                                         name="state"
-                                        rules="required"
+                                        ::rules="address.country !== 'CL' ? 'required' : ''"
                                         :label="trans('admin::app.customers.customers.view.address.edit.state')"
                                         :placeholder="trans('admin::app.customers.customers.view.address.edit.state')"
                                         v-model="address.state"
@@ -299,7 +299,7 @@
                                         type="text"
                                         name="state"
                                         ::value="address.state"
-                                        rules="required"
+                                        ::rules="address.country !== 'CL' ? 'required' : ''"
                                         :label="trans('admin::app.customers.customers.view.address.edit.state')"
                                         :placeholder="trans('admin::app.customers.customers.view.address.edit.state')"
                                     />

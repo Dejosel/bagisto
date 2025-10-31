@@ -195,7 +195,7 @@
                             <x-shop::form.control-group.control
                                 type="select"
                                 ::name="controlName + '.state'"
-                                rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                                ::rules="selectedCountry !== 'CL' ? '{{ core()->isStateRequired() ? 'required' : '' }}' : ''"
                                 ::value="address.state"
                                 :label="trans('shop::app.checkout.onepage.address.state')"
                                 :placeholder="trans('shop::app.checkout.onepage.address.state')"
@@ -218,7 +218,7 @@
                                 type="text"
                                 ::name="controlName + '.state'"
                                 ::value="address.state"
-                                rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                                ::rules="selectedCountry !== 'CL' ? '{{ core()->isStateRequired() ? 'required' : '' }}' : ''"
                                 :label="trans('shop::app.checkout.onepage.address.state')"
                                 :placeholder="trans('shop::app.checkout.onepage.address.state')"
                             />
@@ -245,7 +245,7 @@
                             ::name="controlName + '.region'"
                             ::value="address.region"
                             v-model="selectedRegion"
-                            rules="required"
+                            ::rules="selectedCountry === 'CL' ? 'required' : ''"
                             label="Región"
                             placeholder="Seleccionar Región"
                         >
@@ -276,7 +276,7 @@
                                 type="select"
                                 ::name="controlName + '.comuna'"
                                 ::value="address.comuna"
-                                rules="required"
+                                ::rules="selectedCountry === 'CL' ? 'required' : ''"
                                 label="Comuna"
                                 placeholder="Seleccionar Comuna"
                             >
@@ -299,7 +299,7 @@
                                 type="text"
                                 ::name="controlName + '.comuna'"
                                 ::value="address.comuna"
-                                rules="required"
+                                ::rules="selectedCountry === 'CL' ? 'required' : ''"
                                 label="Comuna"
                                 placeholder="Comuna"
                             />
@@ -321,7 +321,7 @@
                         type="text"
                         ::name="controlName + '.city'"
                         ::value="address.city"
-                        rules="required"
+                        ::rules="selectedCountry !== 'CL' ? 'required' : ''"
                         :label="trans('shop::app.checkout.onepage.address.city')"
                         :placeholder="trans('shop::app.checkout.onepage.address.city')"
                     />

@@ -201,7 +201,7 @@
                             <x-admin::form.control-group.control
                                 type="text"
                                 name="city"
-                                rules="required"
+                                ::rules="country !== 'CL' ? 'required' : ''"
                                 :label="trans('admin::app.customers.customers.view.address.create.city')"
                                 :placeholder="trans('admin::app.customers.customers.view.address.create.city')"
                             />
@@ -263,7 +263,7 @@
                                     type="select"
                                     id="state"
                                     name="state"
-                                    rules="required"
+                                    ::rules="country !== 'CL' ? 'required' : ''"
                                     v-model="state"
                                     :label="trans('admin::app.customers.customers.view.address.create.state')"
                                     :placeholder="trans('admin::app.customers.customers.view.address.create.state')"
@@ -281,7 +281,7 @@
                                 <x-admin::form.control-group.control
                                     type="text"
                                     name="state"
-                                    rules="required"
+                                    ::rules="country !== 'CL' ? 'required' : ''"
                                     :label="trans('admin::app.customers.customers.view.address.create.state')"
                                     :placeholder="trans('admin::app.customers.customers.view.address.create.state')"
                                 />

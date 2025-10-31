@@ -192,7 +192,7 @@
                             type="select"
                             ::name="controlName + '.state'"
                             ::value="address.state"
-                            rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                            ::rules="selectedCountry !== 'CL' ? '{{ core()->isStateRequired() ? 'required' : '' }}' : ''"
                             :label="trans('admin::app.sales.orders.create.cart.address.state')"
                             :placeholder="trans('admin::app.sales.orders.create.cart.address.state')"
                         >
@@ -214,7 +214,7 @@
                             type="text"
                             ::name="controlName + '.state'"
                             ::value="address.state"
-                            rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                            ::rules="selectedCountry !== 'CL' ? '{{ core()->isStateRequired() ? 'required' : '' }}' : ''"
                             :label="trans('admin::app.sales.orders.create.cart.address.state')"
                             :placeholder="trans('admin::app.sales.orders.create.cart.address.state')"
                         />
@@ -236,7 +236,7 @@
                     type="text"
                     ::name="controlName + '.city'"
                     ::value="address.city"
-                    rules="required"
+                    ::rules="selectedCountry !== 'CL' ? 'required' : ''"
                     :label="trans('admin::app.sales.orders.create.cart.address.city')"
                     :placeholder="trans('admin::app.sales.orders.create.cart.address.city')"
                 />
