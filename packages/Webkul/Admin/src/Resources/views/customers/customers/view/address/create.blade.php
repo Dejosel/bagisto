@@ -192,22 +192,7 @@
                             @endif
                         </x-admin::form.control-group>
 
-                        <!-- City -->
-                        <x-admin::form.control-group class="w-full">
-                            <x-admin::form.control-group.label class="required">
-                                @lang('admin::app.customers.customers.view.address.create.city')
-                            </x-admin::form.control-group.label>
 
-                            <x-admin::form.control-group.control
-                                type="text"
-                                name="city"
-                                rules="required"
-                                :label="trans('admin::app.customers.customers.view.address.create.city')"
-                                :placeholder="trans('admin::app.customers.customers.view.address.create.city')"
-                            />
-
-                            <x-admin::form.control-group.error control-name="city" />
-                        </x-admin::form.control-group>
 
                         <!-- PostCode -->
                         <x-admin::form.control-group class="w-full">
@@ -247,47 +232,11 @@
                             <x-admin::form.control-group.error control-name="country" />
                         </x-admin::form.control-group>
 
-                        <!-- State Name -->
+
+
+                        <!-- Región -->
                         <x-admin::form.control-group class="w-full">
                             <x-admin::form.control-group.label class="required">
-                                @lang('admin::app.customers.customers.view.address.create.state')
-                            </x-admin::form.control-group.label>
-
-                            <template v-if="haveStates()">
-                                <x-admin::form.control-group.control
-                                    type="select"
-                                    id="state"
-                                    name="state"
-                                    rules="required"
-                                    v-model="state"
-                                    :label="trans('admin::app.customers.customers.view.address.create.state')"
-                                    :placeholder="trans('admin::app.customers.customers.view.address.create.state')"
-                                >
-                                    <option
-                                        v-for='(state, index) in countryStates[country]'
-                                        :value="state.code"
-                                    >
-                                        @{{ state.default_name }}
-                                    </option>
-                                </x-admin::form.control-group.control>
-                            </template>
-
-                            <template v-else>
-                                <x-admin::form.control-group.control
-                                    type="text"
-                                    name="state"
-                                    rules="required"
-                                    :label="trans('admin::app.customers.customers.view.address.create.state')"
-                                    :placeholder="trans('admin::app.customers.customers.view.address.create.state')"
-                                />
-                            </template>
-
-                            <x-admin::form.control-group.error control-name="state" />
-                        </x-admin::form.control-group>
-
-                        <!-- Chile Region -->
-                        <x-admin::form.control-group class="w-full" v-if="country === 'CL'">
-                            <x-admin::form.control-group.label>
                                 Región
                             </x-admin::form.control-group.label>
 
@@ -309,9 +258,9 @@
                             <x-admin::form.control-group.error control-name="region" />
                         </x-admin::form.control-group>
 
-                        <!-- Chile Comuna -->
-                        <x-admin::form.control-group class="w-full" v-if="country === 'CL' && selectedRegion">
-                            <x-admin::form.control-group.label>
+                        <!-- Comuna -->
+                        <x-admin::form.control-group class="w-full">
+                            <x-admin::form.control-group.label class="required">
                                 Comuna
                             </x-admin::form.control-group.label>
 
@@ -319,6 +268,7 @@
                                 name="comuna"
                                 v-model="selectedComuna"
                                 class="custom-select block w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm font-normal text-gray-600 transition-all hover:border-gray-400 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:border-gray-400"
+                                :disabled="!selectedRegion"
                             >
                                 <option value="">Seleccione Comuna</option>
                                 <option
@@ -412,17 +362,10 @@
                 }
             },
 
-            watch: {
-                country(newCountry) {
-                    if (newCountry === 'CL') {
-                        if (this.chileRegiones.length === 0) {
-                            this.getChileRegiones();
-                        }
-                        if (this.chileComunas && Object.keys(this.chileComunas).length === 0) {
-                            this.getChileComunas();
-                        }
-                    }
-                }
+            mounted() {
+                // Load Chilean data on mount
+                this.getChileRegiones();
+                this.getChileComunas();
             },
 
             methods: {
@@ -433,14 +376,12 @@
                     
                     formData.set('default_address', formData.get('default_address') ? 1 : 0);
                     
-                    // For Chilean addresses, explicitly set region and comuna values
-                    if (this.country === 'CL') {
-                        if (this.selectedRegion) {
-                            formData.set('region', this.selectedRegion);
-                        }
-                        if (this.selectedComuna) {
-                            formData.set('comuna', this.selectedComuna);
-                        }
+                    // Explicitly set region and comuna values
+                    if (this.selectedRegion) {
+                        formData.set('region', this.selectedRegion);
+                    }
+                    if (this.selectedComuna) {
+                        formData.set('comuna', this.selectedComuna);
                     }
 
                     this.$axios.post('{{ route('admin.customers.customers.addresses.store', $customer->id) }}', formData)
@@ -462,15 +403,6 @@
                                 setErrors(error.response.data.errors);
                             }
                         });
-                },
-
-                haveStates() {
-                    /*
-                    * The double negation operator is used to convert the value to a boolean.
-                    * It ensures that the final result is a boolean value,
-                    * true if the array has a length greater than 0, and otherwise false.
-                    */
-                    return !!this.countryStates[this.country]?.length;
                 },
 
                 getChileRegiones() {
