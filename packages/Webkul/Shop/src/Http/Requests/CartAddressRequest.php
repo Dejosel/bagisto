@@ -45,17 +45,21 @@ class CartAddressRequest extends FormRequest
      */
     private function mergeAddressRules(string $addressType): void
     {
+        $country = $this->input("{$addressType}.country");
+        
         $this->mergeWithRules([
             "{$addressType}.company_name" => ['nullable'],
             "{$addressType}.first_name"   => ['required'],
             "{$addressType}.last_name"    => ['required'],
             "{$addressType}.email"        => ['required'],
             "{$addressType}.address"      => ['required', 'array', 'min:1'],
-            "{$addressType}.city"         => ['required'],
+            "{$addressType}.city"         => $country !== 'CL' ? ['required'] : ['nullable'],
             "{$addressType}.country"      => core()->isCountryRequired() ? ['required'] : ['nullable'],
-            "{$addressType}.state"        => core()->isStateRequired() ? ['required'] : ['nullable'],
+            "{$addressType}.state"        => ($country !== 'CL' && core()->isStateRequired()) ? ['required'] : ['nullable'],
             "{$addressType}.postcode"     => core()->isPostCodeRequired() ? ['required', new PostCode] : [new PostCode],
             "{$addressType}.phone"        => ['required', new PhoneNumber],
+            "{$addressType}.region"       => $country === 'CL' ? ['required'] : ['nullable'],
+            "{$addressType}.comuna"       => $country === 'CL' ? ['required'] : ['nullable'],
         ]);
 
         if ($addressType == 'billing') {

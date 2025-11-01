@@ -46,17 +46,21 @@ class CartAddressRequest extends FormRequest
      */
     private function mergeAddressRules(string $addressType)
     {
+        $country = $this->input("{$addressType}.country");
+        
         $this->mergeWithRules([
             "{$addressType}.company_name" => ['nullable'],
             "{$addressType}.first_name"   => ['required'],
             "{$addressType}.last_name"    => ['required'],
             "{$addressType}.email"        => ['required'],
             "{$addressType}.address"      => ['required', 'array', 'min:1'],
-            "{$addressType}.city"         => ['required'],
+            "{$addressType}.city"         => $country !== 'CL' ? ['required'] : ['nullable'],
             "{$addressType}.country"      => ['required'],
-            "{$addressType}.state"        => ['required'],
+            "{$addressType}.state"        => $country !== 'CL' ? ['required'] : ['nullable'],
             "{$addressType}.postcode"     => ['required', new PostCode],
             "{$addressType}.phone"        => ['required', new PhoneNumber],
+            "{$addressType}.region"       => $country === 'CL' ? ['required'] : ['nullable'],
+            "{$addressType}.comuna"       => $country === 'CL' ? ['required'] : ['nullable'],
         ]);
     }
 
