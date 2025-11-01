@@ -134,7 +134,7 @@
         {!! view_render_event('bagisto.shop.layout.footer.footer_text.before') !!}
 
         <p class="text-sm text-zinc-600 max-md:text-center">
-            @lang('shop::app.components.layouts.footer.footer-text', ['current_year'=> date('Y') ])
+            @lang('shop::app.components.layouts.footer.footer-text', ['current_year'=> date('Y'), 'domain' => request()->getHost() ])
         </p>
 
         {!! view_render_event('bagisto.shop.layout.footer.footer_text.after') !!}
