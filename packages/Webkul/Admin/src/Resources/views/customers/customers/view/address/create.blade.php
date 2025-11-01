@@ -193,7 +193,7 @@
                         </x-admin::form.control-group>
 
                         <!-- City -->
-                        <x-admin::form.control-group class="w-full">
+                        <x-admin::form.control-group class="w-full" v-if="country !== 'CL'">
                             <x-admin::form.control-group.label class="required">
                                 @lang('admin::app.customers.customers.view.address.create.city')
                             </x-admin::form.control-group.label>
@@ -201,7 +201,7 @@
                             <x-admin::form.control-group.control
                                 type="text"
                                 name="city"
-                                rules="required"
+                                ::rules="country !== 'CL' ? 'required' : ''"
                                 :label="trans('admin::app.customers.customers.view.address.create.city')"
                                 :placeholder="trans('admin::app.customers.customers.view.address.create.city')"
                             />
@@ -240,7 +240,12 @@
                                 :label="trans('admin::app.customers.customers.view.address.create.country')"
                             >
                                 @foreach (core()->countries() as $country)
-                                    <option value="{{ $country->code }}">{{ $country->name }}</option>
+                                    <option 
+                                        value="{{ $country->code }}"
+                                        {{ $country->code === config('app.default_country') ? 'selected' : '' }}
+                                    >
+                                        {{ $country->name }}
+                                    </option>
                                 @endforeach
                             </x-admin::form.control-group.control>
 
@@ -248,7 +253,7 @@
                         </x-admin::form.control-group>
 
                         <!-- State Name -->
-                        <x-admin::form.control-group class="w-full">
+                        <x-admin::form.control-group class="w-full" v-if="country !== 'CL'">
                             <x-admin::form.control-group.label class="required">
                                 @lang('admin::app.customers.customers.view.address.create.state')
                             </x-admin::form.control-group.label>
@@ -258,7 +263,7 @@
                                     type="select"
                                     id="state"
                                     name="state"
-                                    rules="required"
+                                    ::rules="country !== 'CL' ? 'required' : ''"
                                     v-model="state"
                                     :label="trans('admin::app.customers.customers.view.address.create.state')"
                                     :placeholder="trans('admin::app.customers.customers.view.address.create.state')"
@@ -276,7 +281,7 @@
                                 <x-admin::form.control-group.control
                                     type="text"
                                     name="state"
-                                    rules="required"
+                                    ::rules="country !== 'CL' ? 'required' : ''"
                                     :label="trans('admin::app.customers.customers.view.address.create.state')"
                                     :placeholder="trans('admin::app.customers.customers.view.address.create.state')"
                                 />
@@ -385,7 +390,7 @@
 
             data() {
                 return {
-                    country: "",
+                    country: "{{ config('app.default_country') }}",
 
                     state: "",
 
@@ -409,6 +414,14 @@
                         return [];
                     }
                     return this.chileComunas[this.selectedRegion] || [];
+                }
+            },
+
+            mounted() {
+                // Load Chilean data if country is already Chile on mount
+                if (this.country === 'CL') {
+                    this.getChileRegiones();
+                    this.getChileComunas();
                 }
             },
 

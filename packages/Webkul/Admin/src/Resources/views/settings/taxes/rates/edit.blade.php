@@ -98,7 +98,10 @@
                                 </option>
             
                                 @foreach (core()->countries() as $country)
-                                    <option value="{{ $country->code }}">
+                                    <option 
+                                        value="{{ $country->code }}"
+                                        {{ $country->code === config('app.default_country') ? 'selected' : '' }}
+                                    >
                                         {{ $country->name }}
                                     </option>
                                 @endforeach
@@ -108,7 +111,7 @@
                         </x-admin::form.control-group>
             
                         <!-- State -->
-                        <x-admin::form.control-group>
+                        <x-admin::form.control-group v-if="country !== 'CL'">
                             <!-- Country Have States -->
                             <template v-if="haveStates()">
                                 <x-admin::form.control-group.label>

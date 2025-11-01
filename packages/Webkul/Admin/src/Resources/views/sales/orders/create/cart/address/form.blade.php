@@ -181,7 +181,7 @@
             {!! view_render_event('bagisto.admin.sales.order.create.cart.address.form.country.after') !!}
 
             <!-- State -->
-            <x-admin::form.control-group>
+            <x-admin::form.control-group v-if="selectedCountry !== 'CL'">
                 <x-admin::form.control-group.label class="{{ core()->isStateRequired() ? 'required' : '' }} !mt-0">
                     @lang('admin::app.sales.orders.create.cart.address.state')
                 </x-admin::form.control-group.label>
@@ -192,7 +192,7 @@
                             type="select"
                             ::name="controlName + '.state'"
                             ::value="address.state"
-                            rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                            ::rules="selectedCountry !== 'CL' ? '{{ core()->isStateRequired() ? 'required' : '' }}' : ''"
                             :label="trans('admin::app.sales.orders.create.cart.address.state')"
                             :placeholder="trans('admin::app.sales.orders.create.cart.address.state')"
                         >
@@ -214,7 +214,7 @@
                             type="text"
                             ::name="controlName + '.state'"
                             ::value="address.state"
-                            rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                            ::rules="selectedCountry !== 'CL' ? '{{ core()->isStateRequired() ? 'required' : '' }}' : ''"
                             :label="trans('admin::app.sales.orders.create.cart.address.state')"
                             :placeholder="trans('admin::app.sales.orders.create.cart.address.state')"
                         />
@@ -227,7 +227,7 @@
             {!! view_render_event('bagisto.admin.sales.order.create.cart.address.form.state.after') !!}
 
             <!-- City -->
-            <x-admin::form.control-group>
+            <x-admin::form.control-group v-if="selectedCountry !== 'CL'">
                 <x-admin::form.control-group.label class="required !mt-0">
                     @lang('admin::app.sales.orders.create.cart.address.city')
                 </x-admin::form.control-group.label>
@@ -236,7 +236,7 @@
                     type="text"
                     ::name="controlName + '.city'"
                     ::value="address.city"
-                    rules="required"
+                    ::rules="selectedCountry !== 'CL' ? 'required' : ''"
                     :label="trans('admin::app.sales.orders.create.cart.address.city')"
                     :placeholder="trans('admin::app.sales.orders.create.cart.address.city')"
                 />
@@ -319,7 +319,7 @@
 
             data() {
                 return {
-                    selectedCountry: this.address.country,
+                    selectedCountry: this.address.country || "{{ config('app.default_country') }}",
 
                     countries: [],
 

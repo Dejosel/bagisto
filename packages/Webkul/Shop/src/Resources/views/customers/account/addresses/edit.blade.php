@@ -231,7 +231,7 @@
                 {!! view_render_event('bagisto.shop.customers.account.addresses.edit_form_controls.country.after', ['address' => $address]) !!}
 
                 <!-- State Name -->
-                <x-shop::form.control-group>
+                <x-shop::form.control-group v-if="addressData.country !== 'CL'">
                     <x-shop::form.control-group.label class="{{ core()->isStateRequired() ? 'required' : '' }}">
                         @lang('shop::app.customers.account.addresses.edit.state')
                     </x-shop::form.control-group.label>
@@ -240,7 +240,7 @@
                             type="select"
                             name="state"
                             id="state"
-                            rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                            ::rules="addressData.country !== 'CL' ? '{{ core()->isStateRequired() ? 'required' : '' }}' : ''"
                             v-model="addressData.state"
                             :label="trans('shop::app.customers.account.addresses.edit.state')"
                             :placeholder="trans('shop::app.customers.account.addresses.edit.state')"
@@ -258,7 +258,7 @@
                         <x-shop::form.control-group.control
                             type="text"
                             name="state"
-                            rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                            ::rules="addressData.country !== 'CL' ? '{{ core()->isStateRequired() ? 'required' : '' }}' : ''"
                             :value="old('state') ?? $address->state"
                             :label="trans('shop::app.customers.account.addresses.edit.state')"
                             :placeholder="trans('shop::app.customers.account.addresses.edit.state')"
@@ -282,7 +282,7 @@
                             type="select"
                             name="region"
                             id="region"
-                            rules="required"
+                            ::rules="addressData.country === 'CL' ? 'required' : ''"
                             v-model="addressData.region"
                             label="Región"
                             placeholder="Seleccionar Región"
@@ -314,7 +314,7 @@
                                 type="select"
                                 name="comuna"
                                 id="comuna"
-                                rules="required"
+                                ::rules="addressData.country === 'CL' ? 'required' : ''"
                                 v-model="addressData.comuna"
                                 label="Comuna"
                                 placeholder="Seleccionar Comuna"
@@ -337,7 +337,7 @@
                             <x-shop::form.control-group.control
                                 type="text"
                                 name="comuna"
-                                rules="required"
+                                ::rules="addressData.country === 'CL' ? 'required' : ''"
                                 :value="old('comuna') ?? $address->comuna"
                                 label="Comuna"
                                 placeholder="Comuna"
@@ -348,7 +348,7 @@
                     </x-shop::form.control-group>
                 </template>
 
-                <x-shop::form.control-group>
+                <x-shop::form.control-group v-if="addressData.country !== 'CL'">
                     <x-shop::form.control-group.label class="required">
                         @lang('shop::app.customers.account.addresses.edit.city')
                     </x-shop::form.control-group.label>
@@ -356,7 +356,7 @@
                     <x-shop::form.control-group.control
                         type="text"
                         name="city"
-                        rules="required"
+                        ::rules="addressData.country !== 'CL' ? 'required' : ''"
                         :value="old('city') ?? $address->city"
                         :label="trans('shop::app.customers.account.addresses.edit.city')"
                         :placeholder="trans('shop::app.customers.account.addresses.edit.city')"

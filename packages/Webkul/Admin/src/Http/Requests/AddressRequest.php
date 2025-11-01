@@ -26,19 +26,23 @@ class AddressRequest extends FormRequest
      */
     public function rules()
     {
+        $country = $this->input('country');
+        
         return [
             'company_name'    => ['nullable'],
             'first_name'      => ['required'],
             'last_name'       => ['required'],
             'address'         => ['required', 'array', 'min:1'],
             'country'         => ['required'],
-            'state'           => ['required'],
-            'city'            => ['required'],
+            'state'           => $country !== 'CL' ? ['required'] : ['nullable'],
+            'city'            => $country !== 'CL' ? ['required'] : ['nullable'],
             'postcode'        => ['required', new PostCode],
             'phone'           => ['required', new PhoneNumber],
             'vat_id'          => [(new VatIdRule)->setCountry($this->input('country'))],
             'email'           => ['required'],
             'default_address' => ['sometimes', 'required', 'in:0,1'],
+            'region'          => $country === 'CL' ? ['required'] : ['nullable'],
+            'comuna'          => $country === 'CL' ? ['required'] : ['nullable'],
         ];
     }
 

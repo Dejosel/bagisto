@@ -206,7 +206,12 @@
                             </option>
             
                             @foreach (core()->countries() as $country)
-                                <option value="{{ $country->code }}">{{ $country->name }}</option>
+                                <option 
+                                    value="{{ $country->code }}"
+                                    {{ $country->code === config('app.default_country') ? 'selected' : '' }}
+                                >
+                                    {{ $country->name }}
+                                </option>
                             @endforeach
                         </x-shop::form.control-group.control>
             
@@ -214,7 +219,7 @@
                     </x-shop::form.control-group>
         
                     <!-- State Name -->
-                    <x-shop::form.control-group>
+                    <x-shop::form.control-group v-if="country !== 'CL'">
                         <x-shop::form.control-group.label class="{{ core()->isStateRequired() ? 'required' : '' }}">
                             @lang('shop::app.customers.account.addresses.create.state')
                         </x-shop::form.control-group.label>
@@ -224,7 +229,7 @@
                                 type="select"
                                 id="state"
                                 name="state"
-                                rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                                ::rules="country !== 'CL' ? '{{ core()->isStateRequired() ? 'required' : '' }}' : ''"
                                 v-model="state"
                                 :label="trans('shop::app.customers.account.addresses.create.state')"
                                 :placeholder="trans('shop::app.customers.account.addresses.create.state')"
@@ -243,7 +248,7 @@
                                 type="text"
                                 name="state"
                                 :value="old('state')"
-                                rules="{{ core()->isStateRequired() ? 'required' : '' }}"
+                                ::rules="country !== 'CL' ? '{{ core()->isStateRequired() ? 'required' : '' }}' : ''"
                                 :label="trans('shop::app.customers.account.addresses.create.state')"
                                 :placeholder="trans('shop::app.customers.account.addresses.create.state')"
                             />
@@ -266,7 +271,7 @@
                                 type="select"
                                 id="region"
                                 name="region"
-                                rules="required"
+                                ::rules="country === 'CL' ? 'required' : ''"
                                 v-model="region"
                                 label="Región"
                                 placeholder="Seleccionar Región"
@@ -298,7 +303,7 @@
                                     type="select"
                                     id="comuna"
                                     name="comuna"
-                                    rules="required"
+                                    ::rules="country === 'CL' ? 'required' : ''"
                                     v-model="comuna"
                                     label="Comuna"
                                     placeholder="Seleccionar Comuna"
@@ -322,7 +327,7 @@
                                     type="text"
                                     name="comuna"
                                     :value="old('comuna')"
-                                    rules="required"
+                                    ::rules="country === 'CL' ? 'required' : ''"
                                     label="Comuna"
                                     placeholder="Comuna"
                                 />
@@ -333,7 +338,7 @@
                     </template>
 
                     <!-- City -->
-                    <x-shop::form.control-group>
+                    <x-shop::form.control-group v-if="country !== 'CL'">
                         <x-shop::form.control-group.label class="required">
                             @lang('shop::app.customers.account.addresses.create.city')
                         </x-shop::form.control-group.label>
@@ -341,7 +346,7 @@
                         <x-shop::form.control-group.control
                             type="text"
                             name="city"
-                            rules="required"
+                            ::rules="country !== 'CL' ? 'required' : ''"
                             :value="old('city')"
                             :label="trans('shop::app.customers.account.addresses.create.city')"
                             :placeholder="trans('shop::app.customers.account.addresses.create.city')"
@@ -435,7 +440,7 @@
     
                 data() {
                     return {
-                        country: "{{ old('country') }}",
+                        country: "{{ old('country') ?? config('app.default_country') }}",
 
                         state: "{{ old('state') }}",
 

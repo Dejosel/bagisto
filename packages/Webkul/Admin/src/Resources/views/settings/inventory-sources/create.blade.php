@@ -342,7 +342,10 @@
                         </option>
     
                         @foreach (core()->countries() as $country)
-                            <option value="{{ $country->code }}">
+                            <option 
+                                value="{{ $country->code }}"
+                                {{ $country->code === config('app.default_country') ? 'selected' : '' }}
+                            >
                                 {{ $country->name }}
                             </option>
                         @endforeach
@@ -352,7 +355,7 @@
                 </x-admin::form.control-group>
                         
                 <!-- State -->
-                <x-admin::form.control-group>
+                <x-admin::form.control-group v-if="country !== 'CL'">
                     <x-admin::form.control-group.label class="required">
                         @lang('admin::app.settings.inventory-sources.create.state')
                     </x-admin::form.control-group.label>
@@ -397,7 +400,7 @@
                 </x-admin::form.control-group>
 
                 <!-- City -->
-                <x-admin::form.control-group>
+                <x-admin::form.control-group v-if="country !== 'CL'">
                     <x-admin::form.control-group.label class="required">
                         @lang('admin::app.settings.inventory-sources.create.city')
                     </x-admin::form.control-group.label>
@@ -461,7 +464,7 @@
 
                 data() {
                     return {
-                        country: "{{ old('country') }}",
+                        country: "{{ old('country') ?? config('app.default_country') }}",
 
                         state: "{{ old('state')  }}",
 
