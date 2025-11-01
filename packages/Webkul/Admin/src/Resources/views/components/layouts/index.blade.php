@@ -126,7 +126,7 @@
                 <!-- Powered By -->
                 <div class="mt-auto">
                     <div class="border-t bg-white py-2 text-center text-xs sm:text-sm dark:border-gray-800 dark:bg-gray-900 dark:text-white">
-                        @lang('admin::app.components.layouts.powered-by.description')
+                        {!! trans('admin::app.components.layouts.powered-by.description') !!}
                     </div>
                 </div>
             </div>

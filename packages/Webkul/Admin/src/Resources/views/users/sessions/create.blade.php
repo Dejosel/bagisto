@@ -99,7 +99,7 @@
 
             <!-- Powered By -->
             <div class="text-sm font-normal">
-                @lang('admin::app.users.sessions.powered-by-description')
+                {!! trans('admin::app.users.sessions.powered-by-description') !!}
             </div>
         </div>
     </div>

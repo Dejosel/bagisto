@@ -72,7 +72,7 @@
 
             <!-- Powered By -->
             <div class="text-sm font-normal">
-                @lang('admin::app.users.forget-password.create.powered-by-description')
+                {!! trans('admin::app.users.forget-password.create.powered-by-description') !!}
             </div>
         </div>
     </div>
