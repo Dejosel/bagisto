@@ -417,6 +417,14 @@
                 }
             },
 
+            mounted() {
+                // Load Chilean data if country is already Chile on mount
+                if (this.country === 'CL') {
+                    this.getChileRegiones();
+                    this.getChileComunas();
+                }
+            },
+
             watch: {
                 country(newCountry) {
                     if (newCountry === 'CL') {
