@@ -39,6 +39,14 @@
 
                     {{ $refund->order->shipping_address->state }}<br/>
 
+                    @if ($refund->order->shipping_address->country === 'CL' && $refund->order->shipping_address->chileComuna)
+                        {{ $refund->order->shipping_address->chileComuna->nombre }}<br/>
+                    @endif
+
+                    @if ($refund->order->shipping_address->country === 'CL' && $refund->order->shipping_address->chileRegion)
+                        {{ $refund->order->shipping_address->chileRegion->nombre }}<br/>
+                    @endif
+
                     ---<br/>
 
                     {{ __('admin::app.emails.orders.contact') }} : {{ $refund->order->billing_address->phone }}
@@ -70,6 +78,14 @@
                     {{ $refund->order->billing_address->postcode . " " . $refund->order->billing_address->city }}<br/>
 
                     {{ $refund->order->billing_address->state }}<br/>
+
+                    @if ($refund->order->billing_address->country === 'CL' && $refund->order->billing_address->chileComuna)
+                        {{ $refund->order->billing_address->chileComuna->nombre }}<br/>
+                    @endif
+
+                    @if ($refund->order->billing_address->country === 'CL' && $refund->order->billing_address->chileRegion)
+                        {{ $refund->order->billing_address->chileRegion->nombre }}<br/>
+                    @endif
 
                     ---<br/>
 

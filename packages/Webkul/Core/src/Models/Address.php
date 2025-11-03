@@ -52,4 +52,20 @@ abstract class Address extends Model implements AddressContract
     {
         return $this->belongsTo(Customer::class);
     }
+
+    /**
+     * Get the Chilean region record associated with the address.
+     */
+    public function chileRegion(): BelongsTo
+    {
+        return $this->belongsTo(ChileRegionProxy::modelClass(), 'region');
+    }
+
+    /**
+     * Get the Chilean comuna record associated with the address.
+     */
+    public function chileComuna(): BelongsTo
+    {
+        return $this->belongsTo(ChileComunaProxy::modelClass(), 'comuna', 'codigo');
+    }
 }

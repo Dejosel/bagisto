@@ -39,6 +39,14 @@
 
                     {{ $invoice->order->shipping_address->state }}<br/>
 
+                    @if ($invoice->order->shipping_address->country === 'CL' && $invoice->order->shipping_address->chileComuna)
+                        {{ $invoice->order->shipping_address->chileComuna->nombre }}<br/>
+                    @endif
+
+                    @if ($invoice->order->shipping_address->country === 'CL' && $invoice->order->shipping_address->chileRegion)
+                        {{ $invoice->order->shipping_address->chileRegion->nombre }}<br/>
+                    @endif
+
                     ---<br/>
 
                     @lang('shop::app.emails.orders.contact') : {{ $invoice->order->billing_address->phone }}
@@ -70,6 +78,14 @@
                     {{ $invoice->order->billing_address->postcode . " " . $invoice->order->billing_address->city }}<br/>
 
                     {{ $invoice->order->billing_address->state }}<br/>
+
+                    @if ($invoice->order->billing_address->country === 'CL' && $invoice->order->billing_address->chileComuna)
+                        {{ $invoice->order->billing_address->chileComuna->nombre }}<br/>
+                    @endif
+
+                    @if ($invoice->order->billing_address->country === 'CL' && $invoice->order->billing_address->chileRegion)
+                        {{ $invoice->order->billing_address->chileRegion->nombre }}<br/>
+                    @endif
 
                     ---<br/>
 

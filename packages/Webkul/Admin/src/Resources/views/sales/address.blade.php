@@ -20,6 +20,14 @@
 
         {{ $address->state }}<br>
 
+        @if ($address->country === 'CL' && $address->chileComuna)
+            {{ $address->chileComuna->nombre }}<br>
+        @endif
+
+        @if ($address->country === 'CL' && $address->chileRegion)
+            {{ $address->chileRegion->nombre }}<br>
+        @endif
+
         {{ core()->country_name($address->country) }} @if ($address->postcode) ({{ $address->postcode }}) @endif<br>
 
         {{ __('admin::app.sales.orders.view.contact') }} : {{ $address->phone }}
