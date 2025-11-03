@@ -387,6 +387,14 @@
 
                                     <div>{{ $invoice->order->billing_address->state . ', ' . core()->country_name($invoice->order->billing_address->country) }}</div>
 
+                                    @if ($invoice->order->billing_address->country === 'CL' && $invoice->order->billing_address->chileComuna)
+                                        <div>{{ $invoice->order->billing_address->chileComuna->nombre }}</div>
+                                    @endif
+
+                                    @if ($invoice->order->billing_address->country === 'CL' && $invoice->order->billing_address->chileRegion)
+                                        <div>{{ $invoice->order->billing_address->chileRegion->nombre }}</div>
+                                    @endif
+
                                     <div>@lang('admin::app.sales.invoices.invoice-pdf.contact'): {{ $invoice->order->billing_address->phone }}</div>
                                 </td>
                             @endif
@@ -402,6 +410,14 @@
                                     <div>{{ $invoice->order->shipping_address->postcode . ' ' . $invoice->order->shipping_address->city }}</div>
 
                                     <div>{{ $invoice->order->shipping_address->state . ', ' . core()->country_name($invoice->order->shipping_address->country) }}</div>
+
+                                    @if ($invoice->order->shipping_address->country === 'CL' && $invoice->order->shipping_address->chileComuna)
+                                        <div>{{ $invoice->order->shipping_address->chileComuna->nombre }}</div>
+                                    @endif
+
+                                    @if ($invoice->order->shipping_address->country === 'CL' && $invoice->order->shipping_address->chileRegion)
+                                        <div>{{ $invoice->order->shipping_address->chileRegion->nombre }}</div>
+                                    @endif
 
                                     <div>@lang('admin::app.sales.invoices.invoice-pdf.contact'): {{ $invoice->order->shipping_address->phone }}</div>
                                 </td>
