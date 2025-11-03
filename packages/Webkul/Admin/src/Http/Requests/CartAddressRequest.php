@@ -58,6 +58,20 @@ class CartAddressRequest extends FormRequest
             "{$addressType}.postcode"     => ['required', new PostCode],
             "{$addressType}.phone"        => ['required', new PhoneNumber],
         ]);
+
+        // Add validation for Chilean region and comuna fields
+        $country = $this->input("{$addressType}.country");
+        if ($country === 'CL') {
+            $this->mergeWithRules([
+                "{$addressType}.region" => ['required'],
+                "{$addressType}.comuna" => ['required'],
+            ]);
+        } else {
+            $this->mergeWithRules([
+                "{$addressType}.region" => ['nullable'],
+                "{$addressType}.comuna" => ['nullable'],
+            ]);
+        }
     }
 
     /**

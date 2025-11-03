@@ -26,7 +26,7 @@ class AddressRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'company_name' => ['nullable'],
             'first_name'   => ['required'],
             'last_name'    => ['required'],
@@ -39,6 +39,17 @@ class AddressRequest extends FormRequest
             'vat_id'       => [(new VatIdRule)->setCountry($this->input('country'))],
             'email'        => ['required'],
         ];
+
+        // Add validation for Chilean region and comuna fields
+        if ($this->input('country') === 'CL') {
+            $rules['region'] = ['required'];
+            $rules['comuna'] = ['required'];
+        } else {
+            $rules['region'] = ['nullable'];
+            $rules['comuna'] = ['nullable'];
+        }
+
+        return $rules;
     }
 
     /**
